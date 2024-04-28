@@ -4,5 +4,8 @@
 - compiler
   - bundle and export to web, desktop, and mobile
 - dev tools
+  - Project generator
+  - [node-forge](https://github.com/digitalbazaar/forge) x509 certs
+    - Look at [minica](https://github.com/jsha/minica/blob/master/main.go)
   - transpile TS on the fly with [deno_emit](https://github.com/denoland/deno_emit)
     - Generate source map. Precompile JSX. See CompilerOptions
