@@ -1,18 +1,12 @@
 import { parseArgs } from "std/cli/parse_args.ts";
+import * as devserver from "qw/platform/deno/devserver.ts";
 
 const args = parseArgs(Deno.args, {
   boolean: ["help", "version"],
 });
 
 if (args._[0] === "run") {
-  await import(`${Deno.env.get("INIT_CWD")}/index.jsx`);
-  Deno.serve(
-    {
-      cert: Deno.readTextFileSync("./cert.pem"),
-      key: Deno.readTextFileSync("./cert.key"),
-    },
-    (_req) => new Response("Hello, world")
-  );
+  devserver.run(Deno.env.get("INIT_CWD") ?? ".");
 } else if (args.version) {
   console.log("qw 0.1.0");
   Deno.exit(0);

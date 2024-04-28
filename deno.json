@@ -1,13 +1,15 @@
 {
   "compilerOptions": {
     "jsx": "precompile",
-    "jsxImportSource": "qw"
+    "jsxImportSource": "qw",
+    "types": ["./types.d.ts"]
   },
   "tasks": {
-    "qw": "deno run --allow-env --allow-read --allow-run --allow-net src/qw.ts"
+    "qw": "deno run --watch --allow-env --allow-read --allow-run --allow-net src/qw.ts"
   },
   "imports": {
     "std/": "https://deno.land/std@0.224.0/",
-    "qw/jsx-runtime": "./src/jsx.ts"
+    "qw/jsx-runtime": "./src/jsx.ts",
+    "qw/": "./src/"
   }
 }

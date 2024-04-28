@@ -1,0 +1,8 @@
+- runtime
+  - core
+  - platform
+- compiler
+  - bundle and export to web, desktop, and mobile
+- dev tools
+  - transpile TS on the fly with [deno_emit](https://github.com/denoland/deno_emit)
+    - Generate source map. Precompile JSX. See CompilerOptions
