@@ -1,0 +1,8 @@
+{
+  "tasks": {
+    "qw": "deno run --allow-env --allow-read --allow-run src/qw.ts"
+  },
+  "imports": {
+    "std/": "https://deno.land/std@0.224.0/"
+  }
+}
