@@ -14,11 +14,13 @@ export default class QW {
       this.#platform.serve(server.handleRequest.bind(server));
     } else if (command === "version") {
       this.#platform.log("qw (quickwire) 0.1.0");
+      this.#platform.exit();
     } else {
       this.#platform.log("Usage: qw [options]");
       this.#platform.log("Options:");
       this.#platform.log("  --help     Show this message and exit.");
       this.#platform.log("  --version  Print version information and exit.");
+      this.#platform.exit();
     }
   }
 }

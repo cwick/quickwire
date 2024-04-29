@@ -16,6 +16,7 @@ const platform: Platform = {
       },
       handler
     ),
+  exit: (code = 0) => Deno.exit(code),
 };
 
 const args = parseArgs(Deno.args, {

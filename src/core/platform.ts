@@ -1,4 +1,4 @@
-type Module = {
+export type Module = {
   default?: unknown;
 };
 
@@ -7,4 +7,5 @@ export default interface Platform {
   log(message: string): void;
   get projectDir(): string;
   serve(handler: (request: Request) => Response | Promise<Response>): void;
+  exit(code?: number): void;
 }
