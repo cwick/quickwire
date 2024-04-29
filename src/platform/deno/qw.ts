@@ -1,5 +1,5 @@
-import { parseArgs } from "std/cli/parse_args.ts";
-import { join } from "std/path/mod.ts";
+import { parseArgs } from "deno-std/cli/parse_args.ts";
+import { join } from "deno-std/path/mod.ts";
 import QW from "qw/core/qw.ts";
 import Platform from "qw/core/platform.ts";
 

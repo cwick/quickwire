@@ -1,3 +1,4 @@
+// TODO: finish implementing these methods
 export function jsxTemplate(
   strings: string[],
   ...dynamic: (
@@ -5,7 +6,7 @@ export function jsxTemplate(
     | {
         type: (props: object) => void;
         props: { [key: string]: unknown };
-        key: string;
+        key?: string;
       }
   )[]
 ) {
