@@ -16,6 +16,7 @@ export default class QW {
       this.#platform.log("qw (quickwire) 0.1.0");
       this.#platform.exit();
     } else {
+      // TODO: update this
       this.#platform.log("Usage: qw [options]");
       this.#platform.log("Options:");
       this.#platform.log("  --help     Show this message and exit.");

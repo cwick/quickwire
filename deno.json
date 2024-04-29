@@ -5,7 +5,7 @@
     "types": ["./types.d.ts"]
   },
   "tasks": {
-    "qw": "deno run --watch --allow-env --allow-read --allow-run --allow-net src/platform/deno/qw.ts",
+    "qw": "QW_ROOT=$(pwd); cd $INIT_CWD && deno run --watch --allow-env --allow-read --allow-run --allow-net $QW_ROOT/src/platform/deno/qw.ts",
     "test": "deno test --allow-read --allow-write src",
     "update-snapshots": "deno task test -- --update"
   },

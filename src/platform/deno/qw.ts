@@ -3,7 +3,8 @@ import { join } from "deno-std/path/mod.ts";
 import QW from "qw/core/qw.ts";
 import Platform from "qw/core/platform.ts";
 
-const projectDir = Deno.env.get("INIT_CWD") ?? ".";
+// TODO: Something smart that finds the root project dir
+const projectDir = Deno.cwd();
 const platform: Platform = {
   import: (path) => import(join(projectDir, path)),
   log: (message) => console.log(message),
