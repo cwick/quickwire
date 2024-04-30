@@ -11,4 +11,4 @@ curl -fsSL https://deno.land/install.sh | sh -s $deno_version
 
 
 # TODO: Point this to a public URL
-$exe install --allow-read --allow-run file://$(pwd)/src/platform/deno/qw.ts -- __BOOTSTRAP__
+$exe install --force --allow-read --allow-run file://$(pwd)/src/platform/deno/qw.ts -- __BOOTSTRAP__
