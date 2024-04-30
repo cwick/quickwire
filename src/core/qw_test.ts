@@ -1,6 +1,6 @@
-import { describe, it, mockPlatform } from "qw/core/testing.ts";
+import { describe, it, mockPlatform } from "./testing.ts";
 import { expect } from "deno-std/expect/expect.ts";
-import QW from "qw/core/qw.ts";
+import QW from "./qw.ts";
 
 describe("QW", () => {
   it("prints the version number and exits", () => {

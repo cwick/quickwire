@@ -1,4 +1,4 @@
-import { describe, it, assertSnapshot } from "qw/core/testing.ts";
+import { describe, it, assertSnapshot } from "./testing.ts";
 import Index from "./index.tsx";
 
 describe("index.tsx", () => {

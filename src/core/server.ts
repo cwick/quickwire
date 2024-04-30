@@ -1,5 +1,5 @@
-import Index from "qw/core/index.tsx";
-import Platform, { Module } from "qw/core/platform.ts";
+import Index from "./index.tsx";
+import Platform, { Module } from "./platform.ts";
 
 export default class Server {
   #platform: Platform;

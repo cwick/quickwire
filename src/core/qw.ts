@@ -1,5 +1,5 @@
-import Platform from "qw/core/platform.ts";
-import Server from "qw/core/server.ts";
+import Platform from "./platform.ts";
+import Server from "./server.ts";
 
 export default class QW {
   #platform: Platform;

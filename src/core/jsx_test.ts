@@ -1,5 +1,5 @@
-import { describe, it, expect } from "qw/core/testing.ts";
-import { jsxTemplate } from "qw/jsx-runtime";
+import { describe, it, expect } from "./testing.ts";
+import { jsxTemplate } from "./jsx.ts";
 
 describe("jsxTemplate", () => {
   it("concatenates strings", () => {
