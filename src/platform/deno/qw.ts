@@ -9,10 +9,7 @@ function main(argv: string[]) {
   // TODO: Something smart that finds the root project dir
   const projectDir = Deno.cwd();
   const platform: Platform = {
-    import: (path) =>
-      // TODO: More sophisticated cache busting
-      // We could compute a file hash whenever the file changes
-      import(`file://${join(projectDir, path)}#${Math.random()}`),
+    import: (path) => import(join(projectDir, path)),
     log: (message) => console.log(message),
     projectDir,
     serve: (handler) =>
@@ -44,6 +41,7 @@ function main(argv: string[]) {
       const command = new Deno.Command(Deno.execPath(), {
         args: [
           "run",
+          "--watch",
           "--allow-read",
           "--allow-write",
           "--allow-net",
