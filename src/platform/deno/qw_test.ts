@@ -2,7 +2,7 @@ import { describe, it, expect } from "../../core/testing.ts";
 import { path } from "../../deps.ts";
 
 describe("Main script", () => {
-  it("prints the version number", async (t) => {
+  it("prints the version number", async () => {
     const command = new Deno.Command(Deno.execPath(), {
       args: [
         "run",

@@ -8,8 +8,8 @@ export default class QW {
     this.#platform = platform;
   }
 
-  run(command: "run" | "version" | "help") {
-    if (command === "run") {
+  run(command: "start" | "version" | "help") {
+    if (command === "start") {
       const server = new Server(this.#platform);
       this.#platform.serve(server.handleRequest.bind(server));
     } else if (command === "version") {
@@ -17,7 +17,14 @@ export default class QW {
       this.#platform.exit();
     } else {
       // TODO: update this
-      this.#platform.log("Usage: qw [options]");
+      this.#platform.log("Usage: qw [options] [COMMAND]");
+      this.#platform.log("");
+      this.#platform.log("Commands:");
+      this.#platform.log(
+        "  init\tCreate a new Quickwire project (not implemented)"
+      );
+      this.#platform.log("  start\tStart the current Quickwire project");
+      this.#platform.log("");
       this.#platform.log("Options:");
       this.#platform.log("  --help     Show this message and exit.");
       this.#platform.log("  --version  Print version information and exit.");

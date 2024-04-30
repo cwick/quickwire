@@ -3,9 +3,10 @@ export type Module = {
 };
 
 export default interface Platform {
+  exit(code?: number): void;
+  get projectDir(): string;
   import(path: string): Promise<Module>;
   log(message: string): void;
-  get projectDir(): string;
   serve(handler: (request: Request) => Response | Promise<Response>): void;
-  exit(code?: number): void;
+  watch(callback: () => void): void;
 }

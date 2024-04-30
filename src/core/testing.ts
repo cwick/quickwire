@@ -9,5 +9,6 @@ export function mockPlatform(): Platform {
     import: fn(() => Promise.resolve({})) as () => Promise<object>,
     projectDir: "test_project",
     exit: fn() as () => void,
+    watch: fn() as () => void,
   };
 }
