@@ -24,34 +24,37 @@ function main(argv: string[]) {
     exit: (code = 0) => Deno.exit(code),
   };
 
+  const isBootstrap = argv[0] === "__BOOTSTRAP__";
+  argv = isBootstrap ? argv.slice(1) : argv;
+
   const args = cli.parseArgs(argv, {
     boolean: ["help", "version"],
   });
   const qw = new QW(platform);
 
-  if (argv[0] === "__BOOTSTRAP__") {
-    const command = new Deno.Command(Deno.execPath(), {
-      args: [
-        "run",
-        "--allow-read",
-        "--allow-write",
-        "--allow-net",
-        // TODO: autogenerate config
-        "--config=.quickwire/deno/deno.json",
-        "--lock=.quickwire/deno/deno.lock",
-        import.meta.url,
-        ...argv.slice(1),
-      ],
-    });
-    command.spawn();
-  } else {
-    if (args._[0] === "run") {
-      qw.run("run");
-    } else if (args.version) {
-      qw.run("version");
+  if (args._[0] === "run") {
+    if (isBootstrap) {
+      const command = new Deno.Command(Deno.execPath(), {
+        args: [
+          "run",
+          "--allow-read",
+          "--allow-write",
+          "--allow-net",
+          // TODO: autogenerate config
+          "--config=.quickwire/deno/deno.json",
+          "--lock=.quickwire/deno/deno.lock",
+          import.meta.url,
+          ...argv,
+        ],
+      });
+      command.spawn();
     } else {
-      qw.run("help");
+      qw.run("run");
     }
+  } else if (args.version) {
+    qw.run("version");
+  } else {
+    qw.run("help");
   }
 }
 
