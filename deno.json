@@ -5,7 +5,7 @@
     "types": ["./types.d.ts"]
   },
   "tasks": {
-    "install": "deno install --allow-read --allow-run file://$(pwd)/src/platform/deno/qw.ts -- __BOOTSTRAP__",
+    "install": "deno install -n qw --force --allow-read --allow-run file://$(pwd)/src/platform/deno/cli.ts -- __BOOTSTRAP__",
     "uninstall": "deno uninstall qw",
     "test": "deno test --allow-read --allow-write --allow-run src",
     "update-snapshots": "deno task test -- --update"

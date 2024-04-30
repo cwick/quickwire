@@ -1,7 +1,6 @@
-import { cli } from "../../deps.ts";
 import { path } from "../../deps.ts";
-import QW from "../../core/qw.ts";
 import Platform from "../../core/platform.ts";
+import { parseArgs, runCli } from "../../core/cli.ts";
 
 const join = path.join;
 
@@ -31,35 +30,26 @@ function main(argv: string[]) {
   const isBootstrap = argv[0] === "__BOOTSTRAP__";
   argv = isBootstrap ? argv.slice(1) : argv;
 
-  const args = cli.parseArgs(argv, {
-    boolean: ["help", "version"],
-  });
-  const qw = new QW(platform);
+  const command = parseArgs(argv);
 
-  if (args._[0] === "start") {
-    if (isBootstrap) {
-      const command = new Deno.Command(Deno.execPath(), {
-        args: [
-          "run",
-          "--watch",
-          "--allow-read",
-          "--allow-write",
-          "--allow-net",
-          // TODO: autogenerate config
-          "--config=.quickwire/deno/deno.json",
-          "--lock=.quickwire/deno/deno.lock",
-          import.meta.url,
-          ...argv,
-        ],
-      });
-      command.spawn();
-    } else {
-      qw.run("start");
-    }
-  } else if (args.version) {
-    qw.run("version");
+  if (isBootstrap && command === "start") {
+    const command = new Deno.Command(Deno.execPath(), {
+      args: [
+        "run",
+        "--watch",
+        "--allow-read",
+        "--allow-write",
+        "--allow-net",
+        // TODO: autogenerate config
+        "--config=.quickwire/deno/deno.json",
+        "--lock=.quickwire/deno/deno.lock",
+        import.meta.url,
+        ...argv,
+      ],
+    });
+    command.spawn();
   } else {
-    qw.run("help");
+    runCli(argv, platform);
   }
 }
 

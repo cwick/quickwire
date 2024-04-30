@@ -1,6 +1,8 @@
 import Platform from "./platform.ts";
 import Server from "./server.ts";
 
+export type Command = "start" | "version" | "help";
+
 export default class QW {
   #platform: Platform;
 
@@ -16,7 +18,6 @@ export default class QW {
       this.#platform.log("qw (quickwire) 0.1.0");
       this.#platform.exit();
     } else {
-      // TODO: update this
       this.#platform.log("Usage: qw [options] [COMMAND]");
       this.#platform.log("");
       this.#platform.log("Commands:");

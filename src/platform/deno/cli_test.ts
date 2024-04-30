@@ -7,7 +7,7 @@ describe("Main script", () => {
       args: [
         "run",
         "--allow-read",
-        path.join(import.meta.dirname!, "qw.ts"),
+        path.join(import.meta.dirname!, "cli.ts"),
         "--version",
       ],
     });
