@@ -7,7 +7,7 @@
   "tasks": {
     "install": "deno install --allow-read --allow-run file://$(pwd)/src/platform/deno/qw.ts -- __BOOTSTRAP__",
     "uninstall": "deno uninstall qw",
-    "test": "deno test --allow-read --allow-write src",
+    "test": "deno test --allow-read --allow-write --allow-run src",
     "update-snapshots": "deno task test -- --update"
   },
   "imports": {

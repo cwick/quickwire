@@ -5,7 +5,7 @@ import Platform from "../../core/platform.ts";
 
 const join = path.join;
 
-function main() {
+function main(argv: string[]) {
   // TODO: Something smart that finds the root project dir
   const projectDir = Deno.cwd();
   const platform: Platform = {
@@ -24,12 +24,12 @@ function main() {
     exit: (code = 0) => Deno.exit(code),
   };
 
-  const args = cli.parseArgs(Deno.args, {
+  const args = cli.parseArgs(argv, {
     boolean: ["help", "version"],
   });
   const qw = new QW(platform);
 
-  if (Deno.args[0] === "__BOOTSTRAP__") {
+  if (argv[0] === "__BOOTSTRAP__") {
     const command = new Deno.Command(Deno.execPath(), {
       args: [
         "run",
@@ -40,7 +40,7 @@ function main() {
         "--config=.quickwire/deno/deno.json",
         "--lock=.quickwire/deno/deno.lock",
         import.meta.url,
-        ...Deno.args.slice(1),
+        ...argv.slice(1),
       ],
     });
     command.spawn();
@@ -56,5 +56,5 @@ function main() {
 }
 
 if (import.meta.main) {
-  main();
+  main(Deno.args);
 }
