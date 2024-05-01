@@ -4,7 +4,7 @@
     "jsxImportSource": "qw"
   },
   "imports": {
-    "@quickwire/core": "jsr:@quickwire/core@^0.1.10",
+    "@quickwire/core": "jsr:@quickwire/core@^0.1.12",
     "qw/jsx-runtime": "../../src/core/jsx.ts"
   }
 }
