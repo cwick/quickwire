@@ -1,6 +1,6 @@
 {
   "name": "@quickwire/core",
-  "version": "0.1.0",
+  "version": "0.1.4",
   "exports": {
     ".": "./mod.ts",
     "./cli": "./src/platform/deno/cli.ts"
