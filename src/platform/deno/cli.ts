@@ -9,7 +9,7 @@ async function main(argv: string[]) {
   // TODO: Something smart that finds the root project dir
   const projectDir = Deno.cwd();
   const platform: Platform = {
-    import: (path) => import(`file://${join(projectDir, path)}`),
+    import: (path) => import(join(projectDir, path)),
     log: (message) => console.log(message),
     projectDir,
     serve: (handler) =>
@@ -32,8 +32,10 @@ async function main(argv: string[]) {
   const isBootstrap = argv[0] === "__BOOTSTRAP__";
   argv = isBootstrap ? argv.slice(1) : argv;
 
+  const importPath = join(projectDir, "deno.json");
+  console.log("importPath", importPath);
   const config = (
-    await import(`file://${join(projectDir, "deno.json")}`, {
+    await import(importPath, {
       with: { type: "json" },
     })
   ).default;
