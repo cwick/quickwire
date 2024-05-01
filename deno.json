@@ -1,7 +1,10 @@
 {
   "name": "@quickwire/core",
   "version": "0.1.0",
-  "exports": "./mod.ts",
+  "exports": {
+    ".": "./mod.ts",
+    "./cli": "./src/platform/deno/cli.ts"
+  },
   "compilerOptions": {
     "jsx": "precompile",
     "jsxImportSource": "qw",
