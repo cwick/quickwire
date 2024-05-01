@@ -1,5 +1,5 @@
 import { describe, it, expect } from "../../core/testing.ts";
-import { join } from "@std/path";
+import { path } from "../../deps.ts";
 
 describe("Main script", () => {
   it("prints the version number", async () => {
@@ -7,7 +7,7 @@ describe("Main script", () => {
       args: [
         "run",
         "--allow-read",
-        join(import.meta.dirname!, "cli.ts"),
+        path.join(import.meta.dirname!, "cli.ts"),
         "--version",
       ],
     });

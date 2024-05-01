@@ -1,6 +1,6 @@
 {
   "name": "@quickwire/core",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "exports": {
     ".": "./mod.ts",
     "./cli": "./src/platform/deno/cli.ts"
@@ -18,7 +18,6 @@
   },
   "imports": {
     "@std/expect": "jsr:@std/expect@^0.224.0",
-    "@std/path": "jsr:@std/path@^0.224.0",
     "@std/testing": "jsr:@std/testing@^0.224.0",
     "qw/jsx-runtime": "./src/core/jsx.ts"
   },
