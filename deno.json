@@ -1,6 +1,6 @@
 {
   "name": "@quickwire/core",
-  "version": "0.1.13",
+  "version": "0.1.14",
   "compilerOptions": {
     "jsx": "precompile",
     "jsxImportSource": "qw",
