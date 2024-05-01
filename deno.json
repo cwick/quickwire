@@ -1,6 +1,6 @@
 {
   "name": "@quickwire/core",
-  "version": "0.1.14",
+  "version": "0.1.16",
   "compilerOptions": {
     "jsx": "precompile",
     "jsxImportSource": "qw",
@@ -19,7 +19,8 @@
   },
   "exports": {
     ".": "./mod.ts",
-    "./cli.ts": "./src/platform/deno/cli.ts"
+    "./cli.ts": "./src/platform/deno/cli.ts",
+    "./import_example.ts": "./import_example.ts"
   },
   "publish": {
     "exclude": ["examples", "src/**/*_test.ts", "src/**/__snapshots__"]
