@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "jsx": "precompile",
+    "jsxImportSource": "qw"
+  },
+  "imports": {
+    "@quickwire/core": "jsr:@quickwire/core@^0.1.10",
+    "qw/jsx-runtime": "../../src/core/jsx.ts"
+  }
+}

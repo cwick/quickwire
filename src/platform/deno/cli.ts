@@ -5,7 +5,7 @@ import { version as qwVersion } from "../../../mod.ts";
 
 const join = path.join;
 
-function main(argv: string[]) {
+async function main(argv: string[]) {
   // TODO: Something smart that finds the root project dir
   const projectDir = Deno.cwd();
   const platform: Platform = {
@@ -31,29 +31,28 @@ function main(argv: string[]) {
 
   const isBootstrap = argv[0] === "__BOOTSTRAP__";
   argv = isBootstrap ? argv.slice(1) : argv;
-  const isDev = argv[0] === "__DEV__";
-  argv = isDev ? argv.slice(1) : argv;
 
+  const config = (
+    await import(join(projectDir, "deno.json"), {
+      with: { type: "json" },
+    })
+  ).default;
+
+  const scriptName = `${config.imports["@quickwire/core"]}/cli.ts`;
   const command = parseArgs(argv);
 
-  if (isBootstrap && command === "start") {
-    const command = new Deno.Command(Deno.execPath(), {
+  if (isBootstrap) {
+    new Deno.Command(Deno.execPath(), {
       args: [
         "run",
-        "--watch",
+        ...(command === "start" ? ["--watch"] : []),
         "--allow-read",
         "--allow-write",
         "--allow-net",
-        // TODO: autogenerate config
-        "--config=.quickwire/deno/deno.json",
-        "--lock=.quickwire/deno/deno.lock",
-        // Fix for error:
-        // "Importing a JSR package via an HTTPS URL is not implemented. Use a jsr: specifier instead for the time being."
-        isDev ? import.meta.url : "jsr:@quickwire/core/cli",
+        scriptName,
         ...argv,
       ],
-    });
-    command.spawn();
+    }).spawn();
   } else {
     runCli(argv, platform);
   }

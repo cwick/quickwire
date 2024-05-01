@@ -11,4 +11,4 @@ if ! command -v deno >/dev/null; then
   curl -fsSL https://deno.land/install.sh | sh -s $deno_version
 fi
 
-$exe install -n qw --force --allow-read --allow-run jsr:@quickwire/core/cli -- __BOOTSTRAP__
+$exe install -n qw --force --allow-read --allow-run jsr:@quickwire/core/cli.ts -- __BOOTSTRAP__
