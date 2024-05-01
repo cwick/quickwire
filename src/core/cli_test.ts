@@ -23,6 +23,6 @@ describe("runCli", () => {
   it("prints version number", () => {
     const platform = mockPlatform();
     runCli(["--version"], platform);
-    expect(platform.log).toHaveBeenCalledWith("qw (quickwire) 0.1.0");
+    expect(platform.log).toHaveBeenCalledWith("qw (quickwire) test_version");
   });
 });

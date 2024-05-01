@@ -18,7 +18,7 @@ export default class QW {
       this.#platform.log("Not implemented");
       this.#platform.exit(1);
     } else if (command === "version") {
-      this.#platform.log("qw (quickwire) 0.1.0");
+      this.#platform.log(`qw (quickwire) ${this.#platform.version}`);
       this.#platform.exit();
     } else {
       this.#platform.log("Usage: qw [options] [COMMAND]");

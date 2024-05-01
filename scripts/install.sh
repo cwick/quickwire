@@ -11,6 +11,4 @@ if ! command -v deno >/dev/null; then
   curl -fsSL https://deno.land/install.sh | sh -s $deno_version
 fi
 
-
-# TODO: Point this to a public URL
-$exe install -n qw --force --allow-read --allow-run file://$(pwd)/src/platform/deno/cli.ts -- __BOOTSTRAP__
+$exe install -n qw --force --allow-read --allow-run jsr:@quickwire/core/cli -- __BOOTSTRAP__

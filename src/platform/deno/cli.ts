@@ -1,6 +1,7 @@
 import { path } from "../../deps.ts";
 import type Platform from "../../core/platform.ts";
 import { parseArgs, runCli } from "../../core/cli.ts";
+import { version as qwVersion } from "../../../mod.ts";
 
 const join = path.join;
 
@@ -25,6 +26,7 @@ function main(argv: string[]) {
       // TODO: implement me
       // Watch the current project's files for changes so the core can reload
     },
+    version: qwVersion(),
   };
 
   const isBootstrap = argv[0] === "__BOOTSTRAP__";

@@ -9,4 +9,5 @@ export default interface Platform {
   log(message: string): void;
   serve(handler: (request: Request) => Response | Promise<Response>): void;
   watch(callback: () => void): void;
+  get version(): string;
 }

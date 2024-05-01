@@ -10,5 +10,6 @@ export function mockPlatform(): Platform {
     projectDir: "test_project",
     exit: fn() as () => void,
     watch: fn() as () => void,
+    version: "test_version",
   };
 }
