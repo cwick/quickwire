@@ -13,6 +13,10 @@ describe("parseArgs", () => {
   it("parses start", () => {
     expect(parseArgs(["start"])).toEqual("start");
   });
+
+  it("parses export", () => {
+    expect(parseArgs(["export"])).toEqual("export");
+  });
 });
 
 describe("runCli", () => {

@@ -1,7 +1,7 @@
 import Platform from "./platform.ts";
 import Server from "./server.ts";
 
-export type Command = "start" | "version" | "help";
+export type Command = "start" | "version" | "help" | "export";
 
 export default class QW {
   #platform: Platform;
@@ -10,10 +10,13 @@ export default class QW {
     this.#platform = platform;
   }
 
-  run(command: "start" | "version" | "help") {
+  run(command: Command) {
     if (command === "start") {
       const server = new Server(this.#platform);
       this.#platform.serve(server.handleRequest.bind(server));
+    } else if (command === "export") {
+      this.#platform.log("Not implemented");
+      this.#platform.exit(1);
     } else if (command === "version") {
       this.#platform.log("qw (quickwire) 0.1.0");
       this.#platform.exit();

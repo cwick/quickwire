@@ -9,6 +9,8 @@ export function parseArgs(argv: string[]): Command {
       return "version";
     } else if (arg === "start") {
       return "start";
+    } else if (arg === "export") {
+      return "export";
     }
   }
 
