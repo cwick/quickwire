@@ -1,4 +1,4 @@
-import Platform from "./platform.ts";
+import type Platform from "./platform.ts";
 import Server from "./server.ts";
 
 export type Command = "start" | "version" | "help" | "export";

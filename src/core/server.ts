@@ -1,5 +1,6 @@
 import Index from "./index.tsx";
-import Platform, { Module } from "./platform.ts";
+import type Platform from "./platform.ts";
+import type { Module } from "./platform.ts";
 
 export default class Server {
   #platform: Platform;

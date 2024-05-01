@@ -1,5 +1,5 @@
-import Platform from "./platform.ts";
-import QW, { Command } from "./qw.ts";
+import type Platform from "./platform.ts";
+import QW, { type Command } from "./qw.ts";
 
 export function parseArgs(argv: string[]): Command {
   for (const arg of argv) {

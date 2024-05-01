@@ -1,4 +1,4 @@
-import { join } from "@std/path";
+import { join } from "jsr:@std/path";
 import type Platform from "../../core/platform.ts";
 import { parseArgs, runCli } from "../../core/cli.ts";
 
@@ -27,6 +27,8 @@ function main(argv: string[]) {
 
   const isBootstrap = argv[0] === "__BOOTSTRAP__";
   argv = isBootstrap ? argv.slice(1) : argv;
+  const isDev = argv[0] === "__DEV__";
+  argv = isDev ? argv.slice(1) : argv;
 
   const command = parseArgs(argv);
 
@@ -41,7 +43,9 @@ function main(argv: string[]) {
         // TODO: autogenerate config
         "--config=.quickwire/deno/deno.json",
         "--lock=.quickwire/deno/deno.lock",
-        import.meta.url,
+        // Fix for error:
+        // "Importing a JSR package via an HTTPS URL is not implemented. Use a jsr: specifier instead for the time being."
+        isDev ? import.meta.url : "jsr:@quickwire/core/cli",
         ...argv,
       ],
     });

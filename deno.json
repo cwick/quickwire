@@ -1,6 +1,6 @@
 {
   "name": "@quickwire/core",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "exports": {
     ".": "./mod.ts",
     "./cli": "./src/platform/deno/cli.ts"
@@ -11,7 +11,7 @@
     "types": ["./types.d.ts"]
   },
   "tasks": {
-    "install": "deno install -n qw --force --allow-read --allow-run file://$(pwd)/src/platform/deno/cli.ts -- __BOOTSTRAP__",
+    "install": "deno install -g -n qw --force --allow-read --allow-run file://$(pwd)/src/platform/deno/cli.ts -- __BOOTSTRAP__ __DEV__",
     "uninstall": "deno uninstall qw",
     "test": "deno test --allow-read --allow-write --allow-run src",
     "update-snapshots": "deno task test -- --update"
