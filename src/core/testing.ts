@@ -1,4 +1,4 @@
-import Platform from "./platform.ts";
+import type Platform from "./platform.ts";
 import { fn } from "../platform/testing.ts";
 export * from "../platform/testing.ts";
 

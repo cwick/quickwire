@@ -7,7 +7,9 @@ deno_install="${DENO_INSTALL:-$HOME/.deno}"
 bin_dir="$deno_install/bin"
 exe="$bin_dir/deno"
 
-curl -fsSL https://deno.land/install.sh | sh -s $deno_version
+if ! command -v deno >/dev/null; then
+  curl -fsSL https://deno.land/install.sh | sh -s $deno_version
+fi
 
 
 # TODO: Point this to a public URL

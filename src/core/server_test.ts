@@ -1,6 +1,12 @@
-import { describe, it, mockPlatform, expect, fn } from "./testing.ts";
+import {
+  describe,
+  it,
+  mockPlatform,
+  expect,
+  fn,
+  assertSnapshot,
+} from "./testing.ts";
 import Server from "./server.ts";
-import { assertSnapshot } from "deno-std/testing/snapshot.ts";
 
 describe("Server", () => {
   it("serves", async (t) => {

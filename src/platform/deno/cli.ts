@@ -1,8 +1,6 @@
-import { path } from "../../deps.ts";
-import Platform from "../../core/platform.ts";
+import { join } from "@std/path";
+import type Platform from "../../core/platform.ts";
 import { parseArgs, runCli } from "../../core/cli.ts";
-
-const join = path.join;
 
 function main(argv: string[]) {
   // TODO: Something smart that finds the root project dir
