@@ -9,7 +9,7 @@ async function main(argv: string[]) {
   // TODO: Something smart that finds the root project dir
   const projectDir = Deno.cwd();
   const platform: Platform = {
-    import: (path) => import(join(projectDir, path)),
+    import: (path) => import(`file://${join(projectDir, path)}`),
     log: (message) => console.log(message),
     projectDir,
     serve: (handler) =>
