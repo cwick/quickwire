@@ -4,6 +4,7 @@ function bootstrap(argv: string[]) {
   new Deno.Command(Deno.execPath(), {
     args: [
       "run",
+      // TODO: only watch the "start" command
       "--watch",
       "--allow-read",
       "--allow-write",

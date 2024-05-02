@@ -10,16 +10,18 @@ export default class QW {
     this.#platform = platform;
   }
 
-  run(command: Command) {
+  async run(command: Command) {
     if (command === "start") {
       const server = new Server(this.#platform);
       this.#platform.serve(server.handleRequest.bind(server));
     } else if (command === "export") {
-      this.#platform.log("Not implemented");
-      this.#platform.exit(1);
+      const Index = (await this.#platform.import("routes/index.tsx"))
+        .default! as () => string;
+      await this.#platform.writeTextFile("index.html", Index());
+      this.#platform.exit(0);
     } else if (command === "version") {
       this.#platform.log(`qw (quickwire) ${this.#platform.version}`);
-      this.#platform.exit();
+      this.#platform.exit(0);
     } else {
       this.#platform.log("Usage: qw [options] [COMMAND]");
       this.#platform.log("");
@@ -27,12 +29,13 @@ export default class QW {
       this.#platform.log(
         "  init\tCreate a new Quickwire project (not implemented)"
       );
-      this.#platform.log("  start\tStart the current Quickwire project");
+      this.#platform.log("  export\tExport the current project");
+      this.#platform.log("  start\tStart the current project");
       this.#platform.log("");
       this.#platform.log("Options:");
       this.#platform.log("  --help     Show this message and exit.");
       this.#platform.log("  --version  Print version information and exit.");
-      this.#platform.exit();
+      this.#platform.exit(0);
     }
   }
 }

@@ -4,12 +4,13 @@ export * from "../platform/testing.ts";
 
 export function mockPlatform(): Platform {
   return {
-    log: fn() as () => void,
-    serve: fn() as () => void,
-    import: fn(() => Promise.resolve({})) as () => Promise<object>,
-    projectDir: "test_project",
     exit: fn() as () => void,
-    watch: fn() as () => void,
+    import: fn(() => Promise.resolve({})) as () => Promise<object>,
+    log: fn() as () => void,
+    projectDir: "test_project",
+    serve: fn() as () => void,
     version: "test_version",
+    watch: fn() as () => void,
+    writeTextFile: fn(() => Promise.resolve()) as () => Promise<void>,
   };
 }

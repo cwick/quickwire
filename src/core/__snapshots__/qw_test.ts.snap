@@ -1,0 +1,15 @@
+export const snapshot = {};
+
+snapshot[`QW > prints usage information and exits 1`] = `
+"Usage: qw [options] [COMMAND]
+
+Commands:
+  init	Create a new Quickwire project (not implemented)
+  export	Export the current project
+  start	Start the current project
+
+Options:
+  --help     Show this message and exit.
+  --version  Print version information and exit.
+"
+`;
