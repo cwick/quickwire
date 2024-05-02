@@ -1,4 +1,4 @@
-import { parseArgs, runCli } from "./cli.ts";
+import { parseArgs, main } from "./main.ts";
 import { describe, it, expect, mockPlatform } from "./testing.ts";
 
 describe("parseArgs", () => {
@@ -19,10 +19,10 @@ describe("parseArgs", () => {
   });
 });
 
-describe("runCli", () => {
+describe("main", () => {
   it("prints version number", () => {
     const platform = mockPlatform();
-    runCli(["--version"], platform);
+    main(["--version"], platform);
     expect(platform.log).toHaveBeenCalledWith("qw (quickwire) test_version");
   });
 });

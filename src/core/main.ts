@@ -17,7 +17,7 @@ export function parseArgs(argv: string[]): Command {
   return "help";
 }
 
-export function runCli(argv: string[], platform: Platform) {
+export function main(argv: string[], platform: Platform) {
   const qw = new QW(platform);
   const command = parseArgs(argv);
   qw.run(command);
