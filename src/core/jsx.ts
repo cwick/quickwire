@@ -3,6 +3,7 @@ export function jsxTemplate(
   strings: string[],
   ...dynamic: (
     | string
+    | number
     | {
         type: (props: object) => void;
         props: { [key: string]: unknown };
@@ -15,8 +16,8 @@ export function jsxTemplate(
     output += string;
     if (index < dynamic.length) {
       const value = dynamic[index];
-      if (typeof value === "string") {
-        output += dynamic[index];
+      if (typeof value === "string" || typeof value === "number") {
+        output += value;
       } else {
         output += value.type(value.props ?? {});
       }

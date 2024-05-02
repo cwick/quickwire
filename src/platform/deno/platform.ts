@@ -50,6 +50,7 @@ export default class DenoPlatform implements Platform {
   }
 
   writeTextFile(path: string, data: string) {
-    return Deno.writeTextFile(path, data);
+    // TODO: prevent file writes from leaking outside the project directory
+    return Deno.writeTextFile(join(this.projectDir, path), data);
   }
 }
