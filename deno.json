@@ -9,7 +9,7 @@
   "tasks": {
     "install": "deno install -g -n qw --force --allow-read --allow-run file://$(pwd)/src/platform/deno/bootstrap.ts file://$(pwd)/src/platform/deno/main.ts",
     "uninstall": "deno uninstall qw",
-    "test": "deno test --allow-read --allow-write --allow-run src",
+    "test": "deno test --allow-read --allow-write --allow-run --watch-exclude=/tmp src",
     "update-snapshots": "deno task test -- --update"
   },
   "imports": {
