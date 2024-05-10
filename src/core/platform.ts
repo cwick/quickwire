@@ -1,5 +1,6 @@
 export type Module = {
   default?: unknown;
+  [key: string]: unknown;
 };
 
 export default interface Platform {
