@@ -17,11 +17,16 @@ export default class Server {
       return this.notFound();
     }
 
-    if (typeof pageModule.default !== "function") {
+    const maybePageContents = pageModule.default;
+    if (typeof maybePageContents !== "function") {
       return this.notFound();
     }
 
-    const pageContents = (pageModule.default as () => unknown)();
+    const maybePageData = pageModule.data;
+    const pageData =
+      typeof maybePageData === "function" ? await maybePageData() : undefined;
+
+    const pageContents = maybePageContents({ data: pageData });
     if (typeof pageContents !== "string") {
       return this.notFound();
     }

@@ -4,6 +4,7 @@ import {
   mockPlatform,
   expect,
   assertSnapshot,
+  fn,
 } from "./testing.ts";
 import Server from "./server.ts";
 
@@ -65,6 +66,36 @@ describe("Server", () => {
     const server = new Server(platform);
     const response = await request(server, "/not-found");
     expect(response.status).toEqual(404);
+  });
+
+  it("loads async data for a page", async (t) => {
+    const dummyPageComponent = fn();
+    const platform = mockPlatform({
+      modules: {
+        "routes/page.tsx": {
+          default: dummyPageComponent,
+          data: () => Promise.resolve("dummy data"),
+        },
+      },
+    });
+    const server = new Server(platform);
+    await request(server, "/page");
+    expect(dummyPageComponent).toHaveBeenCalledWith({ data: "dummy data" });
+  });
+
+  it("loads synchronous data for a page", async (t) => {
+    const dummyPageComponent = fn();
+    const platform = mockPlatform({
+      modules: {
+        "routes/page.tsx": {
+          default: dummyPageComponent,
+          data: () => "dummy data",
+        },
+      },
+    });
+    const server = new Server(platform);
+    await request(server, "/page");
+    expect(dummyPageComponent).toHaveBeenCalledWith({ data: "dummy data" });
   });
 
   async function requestText(server: Server, path: string) {
