@@ -6,7 +6,7 @@ import {
   assertSnapshot,
 } from "./testing.ts";
 import Server from "./server.ts";
-import { DataProps } from "../../mod.ts";
+import { Component } from "@quickwire/core";
 
 describe("Server", () => {
   it("serves", async (t) => {
@@ -46,10 +46,10 @@ describe("Server", () => {
     expect(response.status).toEqual(404);
   });
 
-  it("returns 404 if page module's default export is not a function", async () => {
+  it("returns 404 if page module's default export is not valid", async () => {
     const platform = mockPlatform({
       modules: {
-        "routes/not-found.tsx": { default: "not a function" },
+        "routes/not-found.tsx": { default: "not a valid page module" },
       },
     });
     const server = new Server(platform);
@@ -69,16 +69,19 @@ describe("Server", () => {
   });
 
   it("loads async data for a page", async () => {
-    const dataLoader = () =>
-      Promise.resolve({ id: 1, message: "Dummy async data" });
-    const dummyPageComponent = (props: DataProps<typeof dataLoader>) =>
-      props.data.message;
+    const dummyPageComponent = Component({
+      data() {
+        return Promise.resolve({ id: 1, message: "Dummy async data" });
+      },
+      render({ data }) {
+        return data.message;
+      },
+    });
 
     const platform = mockPlatform({
       modules: {
         "routes/page.tsx": {
           default: dummyPageComponent,
-          data: dataLoader,
         },
       },
     });
@@ -88,15 +91,19 @@ describe("Server", () => {
   });
 
   it("loads synchronous data for a page", async () => {
-    const dataLoader = () => ({ id: 1, message: "Dummy synchronous data" });
-    const dummyPageComponent = (props: DataProps<typeof dataLoader>) =>
-      props.data.message;
+    const dummyPageComponent = Component({
+      data() {
+        return { id: 1, message: "Dummy synchronous data" };
+      },
+      render({ data }) {
+        return data.message;
+      },
+    });
 
     const platform = mockPlatform({
       modules: {
         "routes/page.tsx": {
           default: dummyPageComponent,
-          data: dataLoader,
         },
       },
     });

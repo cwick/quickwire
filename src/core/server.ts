@@ -1,6 +1,6 @@
 import Index from "./index.tsx";
 import type Platform from "./platform.ts";
-import type { Module } from "./platform.ts";
+import { isComponentModule } from "./platform.ts";
 
 export default class Server {
   constructor(private platform: Platform) {}
@@ -10,23 +10,28 @@ export default class Server {
     const modulePath =
       pathname === "/" ? "routes/index.tsx" : `routes${pathname}.tsx`;
 
-    let pageModule: Module;
+    let componentModule;
     try {
-      pageModule = await this.platform.import(modulePath);
+      componentModule = await this.platform.import(modulePath);
     } catch (_) {
       return this.notFound();
     }
 
-    const maybePageContents = pageModule.default;
-    if (typeof maybePageContents !== "function") {
+    if (!isComponentModule(componentModule)) {
       return this.notFound();
     }
 
-    const maybePageData = pageModule.data;
-    const pageData =
-      typeof maybePageData === "function" ? await maybePageData() : undefined;
+    let renderFunction, dataLoader;
+    if (typeof componentModule.default === "function") {
+      renderFunction = componentModule.default;
+      dataLoader = () => undefined;
+    } else {
+      renderFunction = componentModule.default.render;
+      dataLoader = componentModule.default.data;
+    }
 
-    const pageContents = maybePageContents({ data: pageData });
+    const pageData = await dataLoader();
+    const pageContents = renderFunction({ data: pageData });
     if (typeof pageContents !== "string") {
       return this.notFound();
     }

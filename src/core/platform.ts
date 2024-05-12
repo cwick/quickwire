@@ -1,7 +1,26 @@
+import { ComponentDefinition } from "../../mod.ts";
+
 export type Module = {
   default?: unknown;
   [key: string]: unknown;
 };
+
+export type ComponentModule = Module & {
+  default:
+    | ComponentDefinition<unknown>
+    | ComponentDefinition<unknown>["render"];
+};
+
+export function isComponentModule(module: Module): module is ComponentModule {
+  return (
+    module.default !== undefined &&
+    module.default !== null &&
+    (module.default instanceof Function ||
+      (typeof module.default === "object" &&
+        "render" in module.default &&
+        module.default.render instanceof Function))
+  );
+}
 
 export default interface Platform {
   exit(code: number): void;
