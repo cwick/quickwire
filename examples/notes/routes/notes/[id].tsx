@@ -1,10 +1,14 @@
-import { Component } from "@quickwire/core";
-export default Component({
+import { Page } from "@quickwire/core";
+import Note from "../../components/note.tsx";
+
+export default Page({
   render({ params }) {
     return (
       <>
         <h1>Notes</h1>
-        This is Note {params.id}
+        <Note
+          note={{ id: Number(params.id), title: "Title", contents: "Contents" }}
+        />
       </>
     );
   },

@@ -8,19 +8,19 @@ type SyncDataLoader<T> = (...args: unknown[]) => T;
 type AsyncDataLoader<T> = (...args: unknown[]) => Promise<T>;
 type DataLoader<T> = SyncDataLoader<T> | AsyncDataLoader<T>;
 type DynamicParams = {[key:string]: string}
-type ComponentProps<T> = { data: Awaited<T>; params: DynamicParams; [key: string]: unknown };
-type RenderFunction<T, PropTypes> = (props: ComponentProps<T> & PropTypes) => string;
+type PageProps<T> = { data: Awaited<T>; params: DynamicParams; [key: string]: unknown };
+type RenderFunction<T> = (props: PageProps<T>) => string;
 
-export type ComponentDefinition<T, PropTypes> =
+export type PageDefinition<T> =
   | {
       data: DataLoader<T>;
-      render: RenderFunction<T, PropTypes>;
+      render: RenderFunction<T>;
     }
   | {
       data?: never;
-      render: RenderFunction<T, PropTypes>;
+      render: RenderFunction<T>;
     };
 
-export function Component<T, PropTypes>(definition: ComponentDefinition<T, PropTypes>) {
+export function Page<T>(definition: PageDefinition<T>) {
   return definition;
 }

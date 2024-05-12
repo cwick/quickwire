@@ -1,6 +1,6 @@
 import { describe, it, mockPlatform, expect } from "./testing.ts";
 import Server from "./server.ts";
-import { Component } from "@quickwire/core";
+import { Page } from "@quickwire/core";
 
 describe("Server", () => {
   it("serves", async (t) => {
@@ -66,7 +66,7 @@ describe("Server", () => {
     const platform = mockPlatform({
       modules: {
         "routes/page.tsx": {
-          default: Component({
+          default: Page({
             data() {
               return Promise.resolve({ id: 1, message: "Dummy async data" });
             },
@@ -86,7 +86,7 @@ describe("Server", () => {
     const platform = mockPlatform({
       modules: {
         "routes/page.tsx": {
-          default: Component({
+          default: Page({
             data() {
               return { id: 1, message: "Dummy synchronous data" };
             },
@@ -106,7 +106,7 @@ describe("Server", () => {
     const platform = mockPlatform({
       modules: {
         "routes/about.tsx": {
-          default: Component({
+          default: Page({
             render() {
               return "About Page";
             },
@@ -123,7 +123,7 @@ describe("Server", () => {
     const platform = mockPlatform({
       modules: {
         "routes/notes/[id].tsx": {
-          default: Component({
+          default: Page({
             render({ params }) {
               return `This is Note ${params.id}`;
             },
@@ -140,14 +140,14 @@ describe("Server", () => {
     const platform = mockPlatform({
       modules: {
         "routes/notes/[id].tsx": {
-          default: Component({
+          default: Page({
             render({ params }) {
               return `This is Note ${params.id}`;
             },
           }),
         },
         "routes/comments/[id].tsx": {
-          default: Component({
+          default: Page({
             render({ params }) {
               return `This is Comment ${params.id}`;
             },

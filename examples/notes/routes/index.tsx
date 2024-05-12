@@ -1,8 +1,8 @@
-import { Component } from "@quickwire/core";
+import { Page } from "@quickwire/core";
 
 type Note = { id: number; title: string; contents: string };
 
-export default Component({
+export default Page({
   data(): Note[] {
     return [
       { id: 1, title: "First note", contents: "First" },

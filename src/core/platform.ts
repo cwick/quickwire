@@ -1,17 +1,15 @@
-import { ComponentDefinition } from "../../mod.ts";
+import { PageDefinition } from "../../mod.ts";
 
 export type Module = {
   default?: unknown;
   [key: string]: unknown;
 };
 
-export type ComponentModule = Module & {
-  default:
-    | ComponentDefinition<unknown, unknown>
-    | ComponentDefinition<unknown, unknown>["render"];
+export type PageModule = Module & {
+  default: PageDefinition<unknown> | PageDefinition<unknown>["render"];
 };
 
-export function isComponentModule(module: Module): module is ComponentModule {
+export function isPageModule(module: Module): module is PageModule {
   return (
     module.default !== undefined &&
     module.default !== null &&
