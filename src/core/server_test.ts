@@ -4,9 +4,9 @@ import {
   mockPlatform,
   expect,
   assertSnapshot,
-  fn,
 } from "./testing.ts";
 import Server from "./server.ts";
+import { DataProps } from "../../mod.ts";
 
 describe("Server", () => {
   it("serves", async (t) => {
@@ -30,14 +30,14 @@ describe("Server", () => {
     await assertSnapshot(t, await requestText(server, "/about"));
   });
 
-  it("returns 404 when page module not found", async (t) => {
+  it("returns 404 when page module not found", async () => {
     const platform = mockPlatform();
     const server = new Server(platform);
     const response = await request(server, "/not-found");
     expect(response.status).toEqual(404);
   });
 
-  it("returns 404 when page module has no default export", async (t) => {
+  it("returns 404 when page module has no default export", async () => {
     const platform = mockPlatform({
       modules: { "routes/not-found.tsx": { something: "else" } },
     });
@@ -46,7 +46,7 @@ describe("Server", () => {
     expect(response.status).toEqual(404);
   });
 
-  it("returns 404 if page module's default export is not a function", async (t) => {
+  it("returns 404 if page module's default export is not a function", async () => {
     const platform = mockPlatform({
       modules: {
         "routes/not-found.tsx": { default: "not a function" },
@@ -57,7 +57,7 @@ describe("Server", () => {
     expect(response.status).toEqual(404);
   });
 
-  it("returns 404 if page module's default export is not a function that returns a string", async (t) => {
+  it("returns 404 if page module's default export is not a function that returns a string", async () => {
     const platform = mockPlatform({
       modules: {
         "routes/not-found.tsx": { default: () => 42 },
@@ -68,40 +68,45 @@ describe("Server", () => {
     expect(response.status).toEqual(404);
   });
 
-  it("loads async data for a page", async (t) => {
-    const dummyPageComponent = fn();
+  it("loads async data for a page", async () => {
+    const dataLoader = () =>
+      Promise.resolve({ id: 1, message: "Dummy async data" });
+    const dummyPageComponent = (props: DataProps<typeof dataLoader>) =>
+      props.data.message;
+
     const platform = mockPlatform({
       modules: {
         "routes/page.tsx": {
           default: dummyPageComponent,
-          data: () => Promise.resolve("dummy data"),
+          data: dataLoader,
         },
       },
     });
     const server = new Server(platform);
-    await request(server, "/page");
-    expect(dummyPageComponent).toHaveBeenCalledWith({ data: "dummy data" });
+    const result = await requestText(server, "/page");
+    expect(result).toContain("Dummy async data");
   });
 
-  it("loads synchronous data for a page", async (t) => {
-    const dummyPageComponent = fn();
+  it("loads synchronous data for a page", async () => {
+    const dataLoader = () => ({ id: 1, message: "Dummy synchronous data" });
+    const dummyPageComponent = (props: DataProps<typeof dataLoader>) =>
+      props.data.message;
+
     const platform = mockPlatform({
       modules: {
         "routes/page.tsx": {
           default: dummyPageComponent,
-          data: () => "dummy data",
+          data: dataLoader,
         },
       },
     });
     const server = new Server(platform);
-    await request(server, "/page");
-    expect(dummyPageComponent).toHaveBeenCalledWith({ data: "dummy data" });
+    const result = await requestText(server, "/page");
+    expect(result).toContain("Dummy synchronous data");
   });
 
   async function requestText(server: Server, path: string) {
-    const response = await server.handleRequest(
-      new Request(`http://localhost:8080${path}`)
-    );
+    const response = await request(server, path);
     expect(response.status).toEqual(200);
     return await response.text();
   }
