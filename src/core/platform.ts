@@ -7,8 +7,8 @@ export type Module = {
 
 export type ComponentModule = Module & {
   default:
-    | ComponentDefinition<unknown>
-    | ComponentDefinition<unknown>["render"];
+    | ComponentDefinition<unknown, unknown>
+    | ComponentDefinition<unknown, unknown>["render"];
 };
 
 export function isComponentModule(module: Module): module is ComponentModule {
