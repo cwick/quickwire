@@ -7,8 +7,13 @@ export default class Server {
 
   async handleRequest(request: Request) {
     const pathname = new URL(request.url).pathname;
+    const match = pathname.match(/\/(?<page>\w+)\/(?<id>\w+)/);
     const modulePath =
-      pathname === "/" ? "routes/index.tsx" : `routes${pathname}.tsx`;
+      pathname === "/"
+        ? "routes/index.tsx"
+        : match
+        ? `routes/${match.groups!.page}/[id].tsx`
+        : `routes${pathname}.tsx`;
 
     let componentModule;
     try {
@@ -27,11 +32,14 @@ export default class Server {
       dataLoader = () => undefined;
     } else {
       renderFunction = componentModule.default.render;
-      dataLoader = componentModule.default.data;
+      dataLoader = componentModule.default.data ?? (() => undefined);
     }
 
     const pageData = await dataLoader();
-    const pageContents = renderFunction({ data: pageData });
+    const pageContents = renderFunction({
+      data: pageData,
+      params: match ? { id: match.groups!.id } : {},
+    });
     if (typeof pageContents !== "string") {
       return this.notFound();
     }

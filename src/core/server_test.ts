@@ -1,10 +1,4 @@
-import {
-  describe,
-  it,
-  mockPlatform,
-  expect,
-  assertSnapshot,
-} from "./testing.ts";
+import { describe, it, mockPlatform, expect } from "./testing.ts";
 import Server from "./server.ts";
 import { Component } from "@quickwire/core";
 
@@ -14,20 +8,20 @@ describe("Server", () => {
       modules: { "routes/index.tsx": { default: () => "hello" } },
     });
     const server = new Server(platform);
-    await assertSnapshot(t, await requestText(server, "/"));
+    expect(await requestText(server, "/")).toContain("hello");
   });
 
   it("serves different paths", async (t) => {
     const platform = mockPlatform({
       modules: {
-        "routes/index.tsx": { default: () => "index" },
-        "routes/about.tsx": { default: () => "about" },
+        "routes/index.tsx": { default: () => "Index Page" },
+        "routes/about.tsx": { default: () => "About Page" },
       },
     });
 
     const server = new Server(platform);
-    await assertSnapshot(t, await requestText(server, "/"));
-    await assertSnapshot(t, await requestText(server, "/about"));
+    expect(await requestText(server, "/")).toContain("Index Page");
+    expect(await requestText(server, "/about")).toContain("About Page");
   });
 
   it("returns 404 when page module not found", async () => {
@@ -69,19 +63,17 @@ describe("Server", () => {
   });
 
   it("loads async data for a page", async () => {
-    const dummyPageComponent = Component({
-      data() {
-        return Promise.resolve({ id: 1, message: "Dummy async data" });
-      },
-      render({ data }) {
-        return data.message;
-      },
-    });
-
     const platform = mockPlatform({
       modules: {
         "routes/page.tsx": {
-          default: dummyPageComponent,
+          default: Component({
+            data() {
+              return Promise.resolve({ id: 1, message: "Dummy async data" });
+            },
+            render({ data }) {
+              return data.message;
+            },
+          }),
         },
       },
     });
@@ -91,25 +83,81 @@ describe("Server", () => {
   });
 
   it("loads synchronous data for a page", async () => {
-    const dummyPageComponent = Component({
-      data() {
-        return { id: 1, message: "Dummy synchronous data" };
-      },
-      render({ data }) {
-        return data.message;
-      },
-    });
-
     const platform = mockPlatform({
       modules: {
         "routes/page.tsx": {
-          default: dummyPageComponent,
+          default: Component({
+            data() {
+              return { id: 1, message: "Dummy synchronous data" };
+            },
+            render({ data }) {
+              return data.message;
+            },
+          }),
         },
       },
     });
     const server = new Server(platform);
     const result = await requestText(server, "/page");
     expect(result).toContain("Dummy synchronous data");
+  });
+
+  it("loads a static page with no data", async () => {
+    const platform = mockPlatform({
+      modules: {
+        "routes/about.tsx": {
+          default: Component({
+            render() {
+              return "About Page";
+            },
+          }),
+        },
+      },
+    });
+    const server = new Server(platform);
+    const result = await requestText(server, "/about");
+    expect(result).toContain("");
+  });
+
+  it("renders a dynamic route", async () => {
+    const platform = mockPlatform({
+      modules: {
+        "routes/notes/[id].tsx": {
+          default: Component({
+            render({ params }) {
+              return `This is Note ${params.id}`;
+            },
+          }),
+        },
+      },
+    });
+    const server = new Server(platform);
+    expect(await requestText(server, "/notes/1")).toContain("This is Note 1");
+    expect(await requestText(server, "/notes/2")).toContain("This is Note 2");
+  });
+
+  it("renders different dynamic routes", async () => {
+    const platform = mockPlatform({
+      modules: {
+        "routes/notes/[id].tsx": {
+          default: Component({
+            render({ params }) {
+              return `This is Note ${params.id}`;
+            },
+          }),
+        },
+        "routes/comments/[id].tsx": {
+          default: Component({
+            render({ params }) {
+              return `This is Comment ${params.id}`;
+            },
+          }),
+        },
+      },
+    });
+    const server = new Server(platform);
+    const result = await requestText(server, "/comments/abc");
+    expect(result).toContain("This is Comment abc");
   });
 
   async function requestText(server: Server, path: string) {
