@@ -24,4 +24,10 @@
 
 - Fix hard coded temp directory in deno.json: --watch-exclude=/tmp
 
-- Example weather app
+- Example apps
+  - Weather
+  - Notes
+  - Stocks
+  - Chat
+  - Reddit client
+  - TODO list
