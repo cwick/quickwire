@@ -15,6 +15,7 @@ export default Page({
     return (
       <>
         <h1>Notes</h1>
+        <a href="notes/new">New Note</a>
         <ul>
           {data.map((note) => (
             <li key={note.id}>

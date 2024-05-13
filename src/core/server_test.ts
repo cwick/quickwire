@@ -160,6 +160,30 @@ describe("Server", () => {
     expect(result).toContain("This is Comment abc");
   });
 
+  it("a static route takes precedence over a dynamic route", async () => {
+    const platform = mockPlatform({
+      modules: {
+        "routes/notes/[id].tsx": {
+          default: Page({
+            render({ params }) {
+              return `This is Note ${params.id}`;
+            },
+          }),
+        },
+        "routes/notes/new.tsx": {
+          default: Page({
+            render() {
+              return `This is the New Note page`;
+            },
+          }),
+        },
+      },
+    });
+    const server = new Server(platform);
+    const result = await requestText(server, "/notes/new");
+    expect(result).toContain("This is the New Note page");
+  });
+
   async function requestText(server: Server, path: string) {
     const response = await request(server, path);
     expect(response.status).toEqual(200);

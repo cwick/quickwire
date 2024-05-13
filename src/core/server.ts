@@ -7,19 +7,26 @@ export default class Server {
 
   async handleRequest(request: Request) {
     const pathname = new URL(request.url).pathname;
-    const match = pathname.match(/\/(?<page>\w+)\/(?<id>\w+)/);
-    const modulePath =
-      pathname === "/"
-        ? "routes/index.tsx"
-        : match
-        ? `routes/${match.groups!.page}/[id].tsx`
-        : `routes${pathname}.tsx`;
+    const staticModulePath =
+      pathname === "/" ? "routes/index.tsx" : `routes${pathname}.tsx`;
+
+    const dynamicMatch = pathname.match(/\/(?<page>\w+)\/(?<id>\w+)/);
+    const dynamicModulePath = dynamicMatch
+      ? `routes/${dynamicMatch.groups!.page}/[id].tsx`
+      : null;
 
     let pageModule;
     try {
-      pageModule = await this.platform.import(modulePath);
+      pageModule = await this.platform.import(staticModulePath);
     } catch (_) {
-      return this.notFound();
+      try {
+        if (!dynamicModulePath) {
+          return this.notFound();
+        }
+        pageModule = await this.platform.import(dynamicModulePath);
+      } catch (_) {
+        return this.notFound();
+      }
     }
 
     if (!isPageModule(pageModule)) {
@@ -38,7 +45,7 @@ export default class Server {
     const pageData = await dataLoader();
     const pageContents = renderFunction({
       data: pageData,
-      params: match ? { id: match.groups!.id } : {},
+      params: dynamicMatch ? { id: dynamicMatch.groups!.id } : {},
     });
     if (typeof pageContents !== "string") {
       return this.notFound();
