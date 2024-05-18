@@ -3,7 +3,7 @@ import Server from "./server.ts";
 import { Page } from "@quickwire/core";
 
 describe("Server", () => {
-  it("serves", async (t) => {
+  it("serves", async () => {
     const platform = mockPlatform({
       modules: { "routes/index.tsx": { default: () => "hello" } },
     });
@@ -11,7 +11,7 @@ describe("Server", () => {
     expect(await requestText(server, "/")).toContain("hello");
   });
 
-  it("serves different paths", async (t) => {
+  it("serves different paths", async () => {
     const platform = mockPlatform({
       modules: {
         "routes/index.tsx": { default: () => "Index Page" },
@@ -27,7 +27,7 @@ describe("Server", () => {
   it("returns 404 when page module not found", async () => {
     const platform = mockPlatform();
     const server = new Server(platform);
-    const response = await request(server, "/not-found");
+    const response = await request("GET", server, "/not-found");
     expect(response.status).toEqual(404);
   });
 
@@ -36,7 +36,7 @@ describe("Server", () => {
       modules: { "routes/not-found.tsx": { something: "else" } },
     });
     const server = new Server(platform);
-    const response = await request(server, "/not-found");
+    const response = await request("GET", server, "/not-found");
     expect(response.status).toEqual(404);
   });
 
@@ -47,7 +47,7 @@ describe("Server", () => {
       },
     });
     const server = new Server(platform);
-    const response = await request(server, "/not-found");
+    const response = await request("GET", server, "/not-found");
     expect(response.status).toEqual(404);
   });
 
@@ -58,7 +58,7 @@ describe("Server", () => {
       },
     });
     const server = new Server(platform);
-    const response = await request(server, "/not-found");
+    const response = await request("GET", server, "/not-found");
     expect(response.status).toEqual(404);
   });
 
@@ -184,13 +184,71 @@ describe("Server", () => {
     expect(result).toContain("This is the New Note page");
   });
 
+  it("handles form submission", async () => {
+    const platform = mockPlatform({
+      modules: {
+        "routes/notes/new.post.tsx": {
+          default: Page({
+            render() {
+              return new Response(null, {
+                status: 303,
+                headers: { Location: "/notes" },
+              });
+            },
+          }),
+        },
+      },
+    });
+    const server = new Server(platform);
+    const result = await request("POST", server, "/notes/new");
+    expect(result.status).toEqual(303);
+    expect(result.headers.get("Location")).toEqual("/notes");
+  });
+
+  it("handles form submission for different methods", async () => {
+    const platform = mockPlatform({
+      modules: {
+        "routes/notes.post.tsx": {
+          default: Page({
+            render() {
+              return new Response(null, {
+                status: 201,
+              });
+            },
+          }),
+        },
+        "routes/notes.delete.tsx": {
+          default: Page({
+            render() {
+              return new Response(null, {
+                status: 204,
+              });
+            },
+          }),
+        },
+      },
+    });
+
+    const server = new Server(platform);
+    let result = await request("POST", server, "/notes");
+    expect(result.status).toEqual(201);
+    result = await request("DELETE", server, "/notes");
+    expect(result.status).toEqual(204);
+  });
+
   async function requestText(server: Server, path: string) {
-    const response = await request(server, path);
+    const response = await request("GET", server, path);
     expect(response.status).toEqual(200);
     return await response.text();
   }
 
-  function request(server: Server, path: string) {
-    return server.handleRequest(new Request(`http://localhost:8080${path}`));
+  function request(
+    method: "GET" | "POST" | "DELETE",
+    server: Server,
+    path: string
+  ) {
+    return server.handleRequest(
+      new Request(`http://localhost:8080${path}`, { method })
+    );
   }
 });

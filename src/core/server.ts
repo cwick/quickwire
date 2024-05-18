@@ -20,12 +20,18 @@ export default class Server {
       pageModule = await this.platform.import(staticModulePath);
     } catch (_) {
       try {
-        if (!dynamicModulePath) {
+        pageModule = await this.platform.import(
+          `routes${pathname}.${request.method.toLowerCase()}.tsx`
+        );
+      } catch (_) {
+        try {
+          if (!dynamicModulePath) {
+            return this.notFound();
+          }
+          pageModule = await this.platform.import(dynamicModulePath);
+        } catch (_) {
           return this.notFound();
         }
-        pageModule = await this.platform.import(dynamicModulePath);
-      } catch (_) {
-        return this.notFound();
       }
     }
 
@@ -47,14 +53,18 @@ export default class Server {
       data: pageData,
       params: dynamicMatch ? { id: dynamicMatch.groups!.id } : {},
     });
-    if (typeof pageContents !== "string") {
+
+    if (typeof pageContents == "string") {
+      return new Response(Index({ children: pageContents }), {
+        status: 200,
+        headers: { "Content-type": "text/html" },
+      });
+    }
+    if (pageContents instanceof Response) {
+      return pageContents;
+    } else {
       return this.notFound();
     }
-
-    return new Response(Index({ children: pageContents }), {
-      status: 200,
-      headers: { "Content-type": "text/html" },
-    });
   }
 
   private notFound() {

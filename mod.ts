@@ -7,9 +7,13 @@ export function version(): string {
 type SyncDataLoader<T> = (...args: unknown[]) => T;
 type AsyncDataLoader<T> = (...args: unknown[]) => Promise<T>;
 type DataLoader<T> = SyncDataLoader<T> | AsyncDataLoader<T>;
-type DynamicParams = {[key:string]: string}
-type PageProps<T> = { data: Awaited<T>; params: DynamicParams; [key: string]: unknown };
-type RenderFunction<T> = (props: PageProps<T>) => string;
+type DynamicParams = { [key: string]: string };
+type PageProps<T> = {
+  data: Awaited<T>;
+  params: DynamicParams;
+  [key: string]: unknown;
+};
+type RenderFunction<T> = (props: PageProps<T>) => string | Response;
 
 export type PageDefinition<T> =
   | {
