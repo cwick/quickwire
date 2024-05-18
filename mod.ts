@@ -4,27 +4,22 @@ export function version(): string {
   return config.version;
 }
 
-type SyncDataLoader<T> = (...args: unknown[]) => T;
-type AsyncDataLoader<T> = (...args: unknown[]) => Promise<T>;
+type SyncDataLoader<T> = (props: RequestProps) => T;
+type AsyncDataLoader<T> = (props: RequestProps) => Promise<T>;
 type DataLoader<T> = SyncDataLoader<T> | AsyncDataLoader<T>;
 type DynamicParams = { [key: string]: string };
-type PageProps<T> = {
-  data: Awaited<T>;
+export type RequestProps = {
   params: DynamicParams;
-  [key: string]: unknown;
+  body: FormData;
 };
-type RenderFunction<T> = (props: PageProps<T>) => string | Response;
 
-export type PageDefinition<T> =
-  | {
-      data: DataLoader<T>;
-      render: RenderFunction<T>;
-    }
-  | {
-      data?: never;
-      render: RenderFunction<T>;
-    };
+type RenderFunction<T> = (props: T) => string | Response;
 
-export function Page<T>(definition: PageDefinition<T>) {
+export type PageDefinition<T> = {
+  data?: DataLoader<T>;
+  render: RenderFunction<Awaited<T>>;
+};
+
+export function Page<T=RequestProps>(definition: PageDefinition<T>) {
   return definition;
 }

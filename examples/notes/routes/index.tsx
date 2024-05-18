@@ -11,13 +11,13 @@ export default Page({
     ];
   },
 
-  render({ data }) {
+  render(notes) {
     return (
       <>
         <h1>Notes</h1>
         <a href="notes/new">New Note</a>
         <ul>
-          {data.map((note) => (
+          {notes.map((note) => (
             <li key={note.id}>
               <a href={`notes/${note.id}`}>{note.title}</a>
             </li>

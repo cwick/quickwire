@@ -70,8 +70,8 @@ describe("Server", () => {
             data() {
               return Promise.resolve({ id: 1, message: "Dummy async data" });
             },
-            render({ data }) {
-              return data.message;
+            render({ message }) {
+              return message;
             },
           }),
         },
@@ -90,8 +90,8 @@ describe("Server", () => {
             data() {
               return { id: 1, message: "Dummy synchronous data" };
             },
-            render({ data }) {
-              return data.message;
+            render({ message }) {
+              return message;
             },
           }),
         },
@@ -236,6 +236,51 @@ describe("Server", () => {
     expect(result.status).toEqual(204);
   });
 
+  it("handles form submission with data", async () => {
+    const platform = mockPlatform({
+      modules: {
+        "routes/notes/new.post.tsx": {
+          default: Page({
+            render({ body }) {
+              return new Response(
+                `Created with message=${body.get("message")}`,
+                {
+                  status: 303,
+                  headers: { Location: "/notes" },
+                }
+              );
+            },
+          }),
+        },
+      },
+    });
+
+    const server = new Server(platform);
+    const formData = new FormData();
+    formData.set("message", "Hello");
+
+    const result = await request("POST", server, "/notes/new", formData);
+    expect(await result.text()).toEqual("Created with message=Hello");
+  });
+
+  it("only responds to POST when explicitly defined", async () => {
+    const platform = mockPlatform({
+      modules: {
+        "routes/notes.tsx": {
+          default: Page({
+            render() {
+              return "Should not respond to POST";
+            },
+          }),
+        },
+      },
+    });
+
+    const server = new Server(platform);
+    const result = await request("POST", server, "/notes");
+    expect(result.status).toEqual(404);
+  });
+
   async function requestText(server: Server, path: string) {
     const response = await request("GET", server, path);
     expect(response.status).toEqual(200);
@@ -245,10 +290,14 @@ describe("Server", () => {
   function request(
     method: "GET" | "POST" | "DELETE",
     server: Server,
-    path: string
+    path: string,
+    body?: BodyInit
   ) {
     return server.handleRequest(
-      new Request(`http://localhost:8080${path}`, { method })
+      new Request(`http://localhost:8080${path}`, {
+        method,
+        body,
+      })
     );
   }
 });
