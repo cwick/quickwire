@@ -69,7 +69,13 @@ export default class Server {
         if (!dynamicBaseName) {
           return null;
         }
-        pageModule = await this.platform.import(`${dynamicBaseName}.tsx`);
+        if (request.method === "GET") {
+          pageModule = await this.platform.import(`${dynamicBaseName}.tsx`);
+        } else {
+          pageModule = await this.platform.import(
+            `${dynamicBaseName}.${request.method.toLowerCase()}.tsx`
+          );
+        }
       } catch (_) {
         return null;
       }

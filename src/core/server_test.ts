@@ -263,7 +263,7 @@ describe("Server", () => {
     expect(await result.text()).toEqual("Created with message=Hello");
   });
 
-  it("only responds to POST when explicitly defined", async () => {
+  it("static routes only responds to POST when explicitly defined", async () => {
     const platform = mockPlatform({
       modules: {
         "routes/notes.tsx": {
@@ -278,6 +278,24 @@ describe("Server", () => {
 
     const server = new Server(platform);
     const result = await request("POST", server, "/notes");
+    expect(result.status).toEqual(404);
+  });
+
+  it("dynamic routes only responds to POST when explicitly defined", async () => {
+    const platform = mockPlatform({
+      modules: {
+        "routes/notes/[id].tsx": {
+          default: Page({
+            render() {
+              return "Should not respond to POST";
+            },
+          }),
+        },
+      },
+    });
+
+    const server = new Server(platform);
+    const result = await request("POST", server, "/notes/123");
     expect(result.status).toEqual(404);
   });
 
